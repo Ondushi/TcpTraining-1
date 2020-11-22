@@ -10,6 +10,8 @@ namespace ClientClassNamespace
         private readonly int _port;
         private NetworkStream _stream;
         private Thread _listeningThread;
+        private bool _isListening = false;
+        private TcpClient _client;
 
         public ClientClass(string serverAddress, int port)
         {
@@ -18,8 +20,9 @@ namespace ClientClassNamespace
         }
         public void Connect()
         {
-            TcpClient client = new TcpClient(_serverAddress, _port);
-            _stream = client.GetStream();
+            _client = new TcpClient(_serverAddress, _port);
+            _stream = _client.GetStream();
+            StartListening();
         }
 
         public void SendMessage(string message)
@@ -30,14 +33,30 @@ namespace ClientClassNamespace
         public event Action<string> OnMessageReceived;
         private void StartListening()
         {
+            _isListening = true;
             _listeningThread = new Thread(() => 
             {
-                byte[] data = new byte[256];
-                Int32 bytes = _stream.Read(data, 0, data.Length);
-                //event
-                string message = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
-                OnMessageReceived?.Invoke(message);
+                while (_isListening)
+                {
+                    byte[] data = new byte[256];
+                    Int32 bytes = _stream.Read(data, 0, data.Length);
+                    //event
+                    string message = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
+                    OnMessageReceived?.Invoke(message);
+                }
             });
+            _listeningThread.Start();
+        }
+        private void StopListening()
+        {
+            _isListening = false;
+        }
+        public void Disconnect()
+        {
+            StopListening();
+            _stream.Close();
+            _listeningThread.Abort();
+            _client.Close();
         }
     }
 }

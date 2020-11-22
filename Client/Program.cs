@@ -8,10 +8,19 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            Connect("127.0.0.1", "String message");
+            //Connect("127.0.0.1", "String message");
             ClientClass client = new ClientClass("127.0.0.1", 13000);
+            client.OnMessageReceived += (message) =>
+            {
+                Console.WriteLine("Message received: " + message );
+            };
             client.Connect();
+
             client.SendMessage("Message");
+
+            client.Disconnect();
+
+            Console.ReadLine();
         }
 
         //Functions:
