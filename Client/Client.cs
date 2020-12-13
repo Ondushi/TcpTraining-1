@@ -11,17 +11,17 @@ namespace ClientClassNamespace
         private NetworkStream _stream;
         private Thread _listeningThread;
         private bool _isListening = false;
-        private TcpClient _client;
+        //private TcpClient _client;
 
         public ClientClass(string serverAddress, int port)
         {
             _serverAddress = serverAddress;
             _port = port;
         }
-        public void Connect()
+        public void Connect(TcpClient client)
         {
-            _client = new TcpClient(_serverAddress, _port);
-            _stream = _client.GetStream();
+            //_client = new TcpClient(_serverAddress, _port);
+            _stream = client.GetStream();
             StartListening();
         }
 
@@ -51,12 +51,12 @@ namespace ClientClassNamespace
         {
             _isListening = false;
         }
-        public void Disconnect()
+        public void Disconnect(TcpClient client)
         {
             StopListening();
             _stream.Close();
-            _listeningThread.Abort();
-            _client.Close();
+            //_listeningThread.Abort();
+            client.Close();
         }
     }
 }

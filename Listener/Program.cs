@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using ClientClassNamespace;
 
 namespace ListenerNamespace
 {
@@ -48,12 +49,17 @@ namespace ListenerNamespace
 
                     // Perform a blocking call to accept requests.
                     // You could also use server.AcceptSocket() here.
-                    TcpClient client = server.AcceptTcpClient();
+                    // TcpClient client = server.AcceptTcpClient();
+
                     Console.WriteLine("Connected!");
                     #endregion class Listener StartWaitingForConnections()
                     #endregion class Listener part1
 
                     #region class User
+                    TcpClient client = server.AcceptTcpClient();
+                    ClientClass user = new ClientClass("127.0.0.1",13000);
+                    user.Connect(client);
+
                     Thread clientThread = new Thread(() => {
                         data = null;
 
