@@ -7,11 +7,11 @@ namespace ListenerNamespace
         private TcpListener _server;
         public void Start()
         {
-            _server = null;
             int port = 13000;
             IPAddress localAddr = IPAddress.Parse("127.0.0.1");
             _server = new TcpListener(localAddr, port);
             _server.Start();
+            StartWaitingForConnections();
         }
         private void StartWaitingForConnections()
         {
