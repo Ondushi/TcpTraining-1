@@ -18,6 +18,8 @@ namespace ListenerNamespace
         {
             Listener listener = new Listener();
             listener.Start();
+            Console.ReadLine();
+            listener.Stop();
         }
 
         static void LastMain(string[] args)
@@ -58,7 +60,7 @@ namespace ListenerNamespace
                     #region class User
                     TcpClient client = server.AcceptTcpClient();
                     ClientClass user = new ClientClass("127.0.0.1",13000);
-                    user.Connect(client);
+                    user.Connect();
 
                     Thread clientThread = new Thread(() => {
                         data = null;

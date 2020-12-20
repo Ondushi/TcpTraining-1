@@ -59,7 +59,6 @@ namespace ClientClassNamespace
         {
             StopListening();
             _stream.Close();
-            //_listeningThread.Abort();
             _client.Close();
         }
     }
